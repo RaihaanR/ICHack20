@@ -26,10 +26,10 @@ app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 
 
 function addOrSetToSettings(key, value, res) {
-    fs.readFile('settings.json', function (err, contents) {
+    fs.readFileSync('settings.json', function (err, contents) {
         let settings = JSON.parse(contents);
         settings[key] = value;
-        fs.writeFile('settings.json', JSON.stringify(settings), function (err) {
+        fs.writeFileSync('settings.json', JSON.stringify(settings), function (err) {
             if (err) throw err;
             console.log('Saved!');
             res.send(settings)

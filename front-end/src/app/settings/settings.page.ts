@@ -67,21 +67,20 @@ export class SettingsPage implements OnInit {
     }
 
     saveSettings() {
+        this.http.get(this.expressURL + '/set/contactNumber/' + document.getElementById("phone").value).subscribe(response => {
+            return response;
+        }); 
+
         this.detections.forEach(x => {
-            console.log(x.action)
+            console.log(x.note)
 
             this.http.get(this.expressURL + '/set/'+ x.note +'/' + x.selected).subscribe(response => {
                 console.log(response);
             }); 
+            
             this.http.get(this.expressURL + '/set/'+ x.note + 'Action' +'/' + x.action).subscribe(response => {
                 console.log(response);
             }); 
-            
         })
-        this.http.get(this.expressURL + '/set/contactNumber/' + document.getElementById("phone").value).subscribe(response => {
-            console.log(response);
-        }); 
-
-
     }
 }
