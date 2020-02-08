@@ -34,6 +34,12 @@ export class SettingsPage implements OnInit {
         selected: false, 
         action: ''}];
 
+    // public phoneNumber = {
+    //     title: 'Contact Number',
+    //     note: 'contactNumber',
+    //     number: '012345678910'
+    // };
+
     expressURL = 'http://localhost:3000';
     phone: any;
 
@@ -44,14 +50,20 @@ export class SettingsPage implements OnInit {
             let detection = this.detections.find(x => x.note == "detectFall")
             detection.selected = true
             
-            let action = this.actionOptions.find(x => x.note == "call")
+            let action = this.actionOptions.find(x => x.note == response.detectFallAction)
             detection.action = action.note
            }
 
            if (response.sadness == "true") {
             let detection = this.detections.find(x => x.note == "sadness")
             detection.selected = true
+
+            let action = this.actionOptions.find(x => x.note == response.sadnessAction)
+            detection.action = action.note
            }
+
+           document.getElementById("phone").value = response.contactNumber
+
         });
     }
 
@@ -60,9 +72,20 @@ export class SettingsPage implements OnInit {
 
     saveSettings() {
         this.detections.forEach(x => {
+            console.log(x.action)
+
             this.http.get(this.expressURL + '/set/'+ x.note +'/' + x.selected).subscribe(response => {
                 console.log(response);
             }); 
+            this.http.get(this.expressURL + '/set/'+ x.note + 'Action' +'/' + x.action).subscribe(response => {
+                console.log(response);
+            }); 
+            
         })
+        this.http.get(this.expressURL + '/set/contactNumber/' + document.getElementById("phone").value).subscribe(response => {
+            console.log(response);
+        }); 
+
+
     }
 }
