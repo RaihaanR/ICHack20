@@ -1,0 +1,39 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>
+            Settings
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-list>
+        <ion-list-header>
+            <ion-label>Detection Settings</ion-label>
+        </ion-list-header>
+        <div *ngFor="let detection of detections">
+            <ion-item>
+                <ion-label>{{detection.title}}</ion-label>
+                <ion-toggle slot="end" [(ngModel)]="detection.selected"></ion-toggle>
+            </ion-item>
+            <ion-item >
+                <ion-label>{{detection.title}} Action</ion-label>
+                <ion-select interface="popover" [disabled]="!detection.selected">
+                    <ion-select-option *ngFor="let item of actionOptions" [value]="item.note">{{item.title}}</ion-select-option>
+                </ion-select>
+            </ion-item>
+        </div>
+
+        <ion-item>
+            <ion-button (click)="saveSettings()" expand="full">Save</ion-button>
+        </ion-item>
+    </ion-list>
+    <!--
+      <div *ngIf="selectedItem" padding>
+        You navigated here from <b>{{selectedItem.title }}</b>
+      </div>
+    -->
+</ion-content>
