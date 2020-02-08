@@ -13,15 +13,23 @@ export class SettingsPage implements OnInit {
         note: 'notify'
     }, {title: 'Call Default Phone', note: 'call'}, {title: 'Start video call', note: 'video'}];
 
-    public detections = [{title: 'Fall Detection', note: 'fall', selected: false}, {title: 'Signs of Sadness', note: 'sadness', selected: false}];
+    public detections = [{title: 'Fall Detection', note: 'fall', selected: false}, {title: 'Signs of Sadness or Lonliness', note: 'sadness', selected: false}];
+    phone: any;
 
-    constructor() {
+    // public validationMessages = {
+    //     phone: [
+    //         { type: 'minlength', message: 'UK Phone Number must be exactly 11 digits long' },
+    //         { type: 'maxlength', message: 'UK Phone Number must be exactly 11 digits long' },
+    //     ]};
+
+        constructor() {
     }
 
     ngOnInit() {
     }
 
     saveSettings() {
+        console.log(this.phone)
         console.log(this.alertTriggers);
     }
 }
