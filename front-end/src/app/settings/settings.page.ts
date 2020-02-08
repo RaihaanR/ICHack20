@@ -68,11 +68,11 @@ export class SettingsPage implements OnInit {
 
     saveSettings() {
         this.http.get(this.expressURL + '/set/contactNumber/' + document.getElementById("phone").value).subscribe(response => {
-            return response;
+            console.log(response);
         }); 
 
         this.detections.forEach(x => {
-            console.log(x.note)
+            console.log(x.note);
 
             this.http.get(this.expressURL + '/set/'+ x.note +'/' + x.selected).subscribe(response => {
                 console.log(response);
