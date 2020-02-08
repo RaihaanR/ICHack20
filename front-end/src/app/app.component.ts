@@ -17,19 +17,19 @@ export class AppComponent {
       icon: 'home'
     },
     {
-      title: 'List',
-      url: '/list',
+      title: 'Events',
+      url: '/events',
       icon: 'list'
-    },
-    {
-      title: 'Settings',
-      url: '/settings',
-      icon: 'cog'
     },
     {
       title: 'Routine',
       url: '/routine',
       icon: 'alarm'
+    },
+    {
+      title: 'Settings',
+      url: '/settings',
+      icon: 'cog'
     }
   ];
 

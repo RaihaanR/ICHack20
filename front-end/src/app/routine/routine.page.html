@@ -16,8 +16,18 @@
         </ion-list-header>
         <div *ngFor="let meal of meals">
             <ion-item>
-                <ion-label>{{meal.title}}</ion-label>
+                <ion-label>{{meal.title}} Tracking</ion-label>
+                <ion-toggle slot="end" [(ngModel)]="meal.selected"></ion-toggle>
+            </ion-item>
+            <ion-item [hidden]="!meal.selected" lines="none">
+                <ion-label> &nbsp; &nbsp;{{meal.title}} Time</ion-label>
                 <ion-datetime display-format="h:mm A" picker-format="h:mm A" value="1990-02-19T08:00Z"></ion-datetime>
+            </ion-item>
+            <ion-item [hidden]="!meal.selected" lines="none">
+                <ion-label> &nbsp; &nbsp;Time range allowed either side</ion-label>
+                <ion-select interface="popover">
+                    <ion-select-option *ngFor="let item of ranges" [value]="item.range">{{item.range}}</ion-select-option>
+                </ion-select>
             </ion-item>
         </div>
 
@@ -26,8 +36,18 @@
         </ion-list-header>
         <div *ngFor="let time of bedtimes">
             <ion-item>
-                <ion-label>{{time.title}}</ion-label>
+                <ion-label>{{time.title}} Tracking</ion-label>
+                <ion-toggle slot="end" [(ngModel)]="time.selected"></ion-toggle>
+            </ion-item>
+            <ion-item [hidden]="!time.selected" lines="none">
+                <ion-label>&nbsp; &nbsp;{{time.title}} Time</ion-label>
                 <ion-datetime display-format="h:mm A" picker-format="h:mm A" value="1990-02-19T08:00Z"></ion-datetime>
+            </ion-item>
+            <ion-item [hidden]="!time.selected" lines="none">
+                <ion-label>&nbsp; &nbsp;Time range allowed either side</ion-label>
+                <ion-select interface="popover">
+                    <ion-select-option *ngFor="let item of ranges" [value]="item.range">{{item.range}}</ion-select-option>
+                </ion-select>
             </ion-item>
         </div>
 

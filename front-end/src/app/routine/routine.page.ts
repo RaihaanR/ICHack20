@@ -13,8 +13,9 @@ export class RoutinePage implements OnInit {
         note: 'notify'
     }, {title: 'Call Default Phone', note: 'call'}, {title: 'Start video call', note: 'video'}];
 
-    public meals = [{title: 'Breakfast'}, {title: 'Lunch'}, {title: 'Dinner'}]
-    public bedtimes = [{title: 'Wake up'}, {title: 'Bed time'}]
+    public meals = [{title: 'Breakfast', selected: false}, {title: 'Lunch', selected: false}, {title: 'Dinner', selected: false}];
+    public bedtimes = [{title: 'Wake up', selected: false}, {title: 'Bed time', selected: false}];
+    public ranges = [{range: '15 minutes'}, {range: '30 minutes'}, {range: '1 hour'}];
 
     constructor() {
     }
