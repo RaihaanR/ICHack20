@@ -25,6 +25,11 @@ export class AppComponent {
       title: 'Settings',
       url: '/settings',
       icon: 'cog'
+    },
+    {
+      title: 'Routine',
+      url: '/routine',
+      icon: 'alarm'
     }
   ];
 

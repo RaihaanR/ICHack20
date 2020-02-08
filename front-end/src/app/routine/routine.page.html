@@ -1,0 +1,38 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>
+            Routine
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-list>
+        <ion-list-header>
+            <ion-label>Meal times</ion-label>
+        </ion-list-header>
+        <div *ngFor="let meal of meals">
+            <ion-item>
+                <ion-label>{{meal.title}}</ion-label>
+                <ion-datetime display-format="h:mm A" picker-format="h:mm A" value="1990-02-19T08:00Z"></ion-datetime>
+            </ion-item>
+        </div>
+
+        <ion-list-header>
+            <ion-label>Bed times</ion-label>
+        </ion-list-header>
+        <div *ngFor="let time of bedtimes">
+            <ion-item>
+                <ion-label>{{time.title}}</ion-label>
+                <ion-datetime display-format="h:mm A" picker-format="h:mm A" value="1990-02-19T08:00Z"></ion-datetime>
+            </ion-item>
+        </div>
+
+        <ion-item>
+            <ion-button (click)="saveSettings()" expand="full">Save</ion-button>
+        </ion-item>
+    </ion-list>
+</ion-content>
