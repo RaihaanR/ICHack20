@@ -21,7 +21,7 @@
             </ion-item>
             <ion-item >
                 <ion-label>{{detection.title}} Action</ion-label>
-                <ion-select interface="popover" [disabled]="!detection.selected">
+                <ion-select [(ngModel)]="detection.action" interface="popover" [disabled]="!detection.selected">
                     <ion-select-option *ngFor="let item of actionOptions" [value]="item.note">{{item.title}}</ion-select-option>
                 </ion-select>
             </ion-item>
@@ -33,13 +33,7 @@
                 <ion-input [ngModel]="phone" placeholder="Enter Default Phone Number" type="tel" clear-input="true" minlength="11" maxlength="11" inputmode="tel"></ion-input>
             </ion-item>
         </div>
-<!--        <div class="validation-errors">-->
-<!--            <ng-container *ngFor="let validation of validationMessages.phone">-->
-<!--                <div class="error-message" *ngIf="phone.get().hasError(validation.type) && (phone.get().dirty || phone.get().touched)">-->
-<!--                    {{ validation.message }}-->
-<!--                </div>-->
-<!--            </ng-container>-->
-<!--        </div>-->
+
 
         <ion-item>
             <ion-button (click)="saveSettings()" expand="full">Save</ion-button>

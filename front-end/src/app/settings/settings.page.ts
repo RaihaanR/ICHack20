@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
 
 @Component({
     selector: 'app-list',
@@ -6,30 +7,33 @@ import {Component, OnInit} from '@angular/core';
     styleUrls: ['settings.page.scss']
 })
 export class SettingsPage implements OnInit {
-    private alertTriggers = [];
-    detectFalls: boolean;
+
     public actionOptions: Array<{ title: string; note: string }> = [{
         title: 'Notification',
         note: 'notify'
     }, {title: 'Call Default Phone', note: 'call'}, {title: 'Start video call', note: 'video'}];
 
-    public detections = [{title: 'Fall Detection', note: 'fall', selected: false}, {title: 'Signs of Sadness or Lonliness', note: 'sadness', selected: false}];
+    public detections = [{
+        title: 'Fall Detection',
+        note: 'fall',
+        selected: false,
+        action: ''
+    }, {title: 'Signs of Sadness or Loneliness', note: 'sadness', selected: false, action: ''}];
+
+    expressURL = 'http://localhost:3000';
     phone: any;
 
-    // public validationMessages = {
-    //     phone: [
-    //         { type: 'minlength', message: 'UK Phone Number must be exactly 11 digits long' },
-    //         { type: 'maxlength', message: 'UK Phone Number must be exactly 11 digits long' },
-    //     ]};
-
-        constructor() {
+    constructor(private http: HttpClient) {
+        this.http.get(this.expressURL + '/settings').subscribe(response => {
+           console.log(response);
+           this.detections.find(x -> x.note == "")
+        });
     }
 
     ngOnInit() {
     }
 
     saveSettings() {
-        console.log(this.phone)
-        console.log(this.alertTriggers);
+        console.log(this.phone);
     }
 }
