@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import { EDEADLK } from 'constants';
+import { ToastController } from '@ionic/angular';
 
 @Component({
     selector: 'app-list',
@@ -82,5 +83,16 @@ export class SettingsPage implements OnInit {
                 console.log(response);
             }); 
         })
+        this.showSaved();
+
     }
+
+    async showSaved() {
+        const controller = new ToastController();
+        const toast = await controller.create({
+          message: 'Your settings have been saved.',
+          duration: 2000
+        });
+        toast.present();
+      }
 }
