@@ -5,10 +5,12 @@ import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 
 import { SettingsPage } from './settings.page';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   imports: [
     CommonModule,
+    HttpClientModule,
     FormsModule,
     IonicModule,
     RouterModule.forChild([

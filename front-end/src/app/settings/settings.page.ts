@@ -26,7 +26,7 @@ export class SettingsPage implements OnInit {
     constructor(private http: HttpClient) {
         this.http.get(this.expressURL + '/settings').subscribe(response => {
            console.log(response);
-           this.detections.find(x -> x.note == "")
+           this.detections.find(x => x.note == "")
         });
     }
 
