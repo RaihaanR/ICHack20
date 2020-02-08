@@ -53,14 +53,9 @@ app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 
 
 function addOrSetToSettings(key, value, res) {
-    fs.readFileSync('settings.json', function (err, contents) {
-        let settings = JSON.parse(contents);
-        settings[key] = value;
-        fs.writeFileSync('settings.json', JSON.stringify(settings), function (err) {
-            if (err) throw err;
-            console.log('Saved!');
-            res.send(settings)
-        });
-    });
-
+    var json = fs.readFileSync('settings.json', 'utf8');
+    let settings = JSON.parse(json);
+    settings[key] = value;
+    fs.writeFileSync('settings.json', JSON.stringify(settings), null);
+    res.send(settings)
 }
