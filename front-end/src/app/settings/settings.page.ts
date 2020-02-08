@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import { EDEADLK } from 'constants';
 
 @Component({
     selector: 'app-list',
@@ -11,14 +12,27 @@ export class SettingsPage implements OnInit {
     public actionOptions: Array<{ title: string; note: string }> = [{
         title: 'Notification',
         note: 'notify'
-    }, {title: 'Call Default Phone', note: 'call'}, {title: 'Start video call', note: 'video'}];
+    }, 
+    {
+        title: 'Call Default Phone', 
+        note: 'call'
+    }, 
+    {
+        title: 'Start video call', 
+        note: 'video'
+    }];
 
     public detections = [{
         title: 'Fall Detection',
-        note: 'fall',
+        note: 'detectFall',
         selected: false,
         action: ''
-    }, {title: 'Signs of Sadness or Loneliness', note: 'sadness', selected: false, action: ''}];
+    }, 
+    {
+        title: 'Signs of Sadness or Loneliness', 
+        note: 'sadness', 
+        selected: false, 
+        action: ''}];
 
     expressURL = 'http://localhost:3000';
     phone: any;
@@ -26,7 +40,18 @@ export class SettingsPage implements OnInit {
     constructor(private http: HttpClient) {
         this.http.get(this.expressURL + '/settings').subscribe(response => {
            console.log(response);
-           this.detections.find(x => x.note == "")
+           if (response.detectFall == "true") {
+            let detection = this.detections.find(x => x.note == "detectFall")
+            detection.selected = true
+            
+            let action = this.actionOptions.find(x => x.note == "call")
+            detection.action = action.note
+           }
+
+           if (response.sadness == "true") {
+            let detection = this.detections.find(x => x.note == "sadness")
+            detection.selected = true
+           }
         });
     }
 
@@ -34,6 +59,10 @@ export class SettingsPage implements OnInit {
     }
 
     saveSettings() {
-        console.log(this.phone);
+        this.detections.forEach(x => {
+            this.http.get(this.expressURL + '/set/'+ x.note +'/' + x.selected).subscribe(response => {
+                console.log(response);
+            }); 
+        })
     }
 }
