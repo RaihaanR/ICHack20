@@ -49,17 +49,13 @@ export class SettingsPage implements OnInit {
            if (response.detectFall == "true") {
             let detection = this.detections.find(x => x.note == "detectFall")
             detection.selected = true
-            
-            let action = this.actionOptions.find(x => x.note == response.detectFallAction)
-            detection.action = action.note
+            detection.action = response.detectFallAction
            }
 
            if (response.sadness == "true") {
             let detection = this.detections.find(x => x.note == "sadness")
             detection.selected = true
-
-            let action = this.actionOptions.find(x => x.note == response.sadnessAction)
-            detection.action = action.note
+            detection.action = response.sadnessAction
            }
 
            document.getElementById("phone").value = response.contactNumber
