@@ -20,12 +20,28 @@ app.get('/set/:param/:value', (req, res) => {
     console.log(req.params);
     const param = req.params.param;
     const value = req.params.value;
-    addOrSetToSettings(param, value, res)
+    addOrSetToSettings(param, value, res);
 });
 
 app.get('/settings', (req, res) => {
     fs.readFile('settings.json', function (err, contents) {
         res.send(JSON.parse(contents));
+    });
+});
+
+app.get('/numPeople', (req, res) => {
+    const options = {
+        uri: 'https://api.meraki.com/api/v0/devices/Q2FV-363D-9Z7Z/camera/analytics/live',
+        method: 'GET',
+        headers: {
+            'X-Cisco-Meraki-API-Key': '96850833f85705851d736e34914eea6db9360280',
+            'Accept': 'application/json'
+        }
+    };
+
+    request(options, (err, resource, body) => {
+        const countObj = JSON.parse(body.toString())["zones"]["0"]["person"];
+        res.send(countObj);
     });
 });
 
@@ -38,19 +54,18 @@ app.get('/getImage/:timestamp', (req, res) => {
         headers: {
             'X-Cisco-Meraki-API-Key': '96850833f85705851d736e34914eea6db9360280',
             'Accept': 'application/json',
-            'Content-type': 'application/json',
+            'Content-type': 'application/json'
         }
     };
     const req1 = https.request(options, res1 => {
         console.log(`statusCode: ${res1.statusCode}`);
 
         res1.on('data', d => {
-            res.send(JSON.parse(d.toString()))
-
+            res.send(JSON.parse(d.toString()));
         })
     });
     req1.write(JSON.stringify({"timestamp": req.params.timestamp}));
-    req1.end()
+    req1.end();
 });
 
 app.get('/routine', (req, res) => {
@@ -96,16 +111,18 @@ function sendMessage() {
 
 app.get('/emergency', (req, res) => {
     sendMessage().then(message => console.log(message.sid));
-})
+});
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}!`);
+});
 
 function addOrSetToSettings(key, value, res) {
     var json = fs.readFileSync('settings.json', 'utf8');
     let settings = JSON.parse(json);
     settings[key] = value;
     fs.writeFileSync('settings.json', JSON.stringify(settings), null);
-    res.send(settings)
+    res.send(settings);
 }
 
 function addOrSetToRoutine(key, value, res) {
@@ -113,7 +130,7 @@ function addOrSetToRoutine(key, value, res) {
     let routine = JSON.parse(json);
     routine[key] = value;
     fs.writeFileSync('routine.json', JSON.stringify(routine), null);
-    res.send(routine)
+    res.send(routine);
 }
 
 const secret = 'cisco';
@@ -136,7 +153,7 @@ app.get(route, function (req, res) {
 //
 // Getting the flow of data every 1 to 2 minutes
 app.post(route, function (req, res) {
-    console.log("post")
+    console.log("post");
     if (req.body.secret === secret) {
         console.log('Secret verified');
         cmxData(req.body);
