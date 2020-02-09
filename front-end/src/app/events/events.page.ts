@@ -1,7 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {NavController} from '@ionic/angular';
+import { Url } from 'url';
 
+interface UrlObject {
+    url: string;
+}
 
 @Component({
     selector: 'app-list',
@@ -62,13 +66,14 @@ export class EventsPage implements OnInit {
 
     openImage(initialString: string) {
         this.http.get(this.expressURL + '/getImage/' + initialString + 'Z').subscribe(response => {
+            let url = (response as UrlObject).url;
             // console.log(response);
             // window.href = (response.url);
             // localStorage.setItem('imageURL', initialString);
             // @ts-ignore
-            console.log(response.url);
+            console.log(url);
             // @ts-ignore
-            window.open(response.url.toString(), '_system');
+            window.open(url.toString(), '_system');
             // @ts-ignore
             // const browser = this.iab.create(response.url.toString());
             // this.navCtrl.navigateForward(response.url);

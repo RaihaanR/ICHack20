@@ -1,11 +1,17 @@
 import { Component } from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import { Url } from 'url';
+
+interface UrlObject {
+  url: string;
+}
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
+
 export class HomePage {
 
   public items: Array<{ title: string; note: string}> = [];
@@ -27,6 +33,7 @@ export class HomePage {
     });
 
     this.http.get(this.expressURL + '/numPeople').subscribe(response => {
+      console.log("people: " + response);
       let numPeople = response as string
       if (numPeople == "1") {
         this.people = "There is 1 person in the house";
@@ -53,9 +60,10 @@ export class HomePage {
 
   openImage(initialString: string) {
     this.http.get(this.expressURL + '/getImage/' + initialString + 'Z').subscribe(response => {
-        console.log(response.url);
-        window.open(response.url.toString(), '_system');
-    });
+      let url = (response as UrlObject).url;
+        console.log(url);
+        window.open(url.toString(), '_system');
+  });
 }
   
 
