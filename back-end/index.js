@@ -41,7 +41,7 @@ app.get('/numPeople', (req, res) => {
 
     request(options, (err, resource, body) => {
         const countObj = JSON.parse(body.toString())["zones"]["0"]["person"];
-        res.send(countObj);
+        res.send(countObj.toString());
     });
 });
 
