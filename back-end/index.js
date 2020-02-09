@@ -13,12 +13,12 @@ let address = "36 Star Road \n" +
 
 app.use(cors());
 
-function getSnapshot(useCurrentTime, timestamp) {
+function getSnapshot(uri, useCurrentTime, timestamp) {
   var ops;
 
   if (useCurrentTime) {
     ops = {
-      uri: 'https:/://api.meraki.com/api/v0/networks/L_575897802350005362/cameras/Q2FV-363D-9Z7Z/snapshot',
+      uri: uri,
       method: 'POST',
       headers: {
         'X-Cisco-Meraki-API-Key': '96850833f85705851d736e34914eea6db9360280',
@@ -28,7 +28,7 @@ function getSnapshot(useCurrentTime, timestamp) {
     }
   } else {
     ops = {
-      uri: 'https:/://api.meraki.com/api/v0/networks/L_575897802350005362/cameras/Q2FV-363D-9Z7Z/snapshot',
+      uri: uri,
       method: 'POST',
       json: {
         "timestamp": timestamp
@@ -41,9 +41,12 @@ function getSnapshot(useCurrentTime, timestamp) {
     }
   }
 
-  request(ops, function (err, response) {
-      console.log(response);
-      return;
+  request(ops, function (err, response, body) {
+      if (response.statusCode == '308' && response.headers.location) {
+        return getSnapshot(response.headers.location, useCurrentTime, timestamp);
+      } else {
+        console.log(body);
+      }
   })
 }
 
@@ -56,16 +59,19 @@ app.get('/set/:param/:value', (req, res) => {
     addOrSetToSettings(param, value, res)
 });
 
-
 app.get('/settings', (req, res) => {
     fs.readFile('settings.json', function (err, contents) {
         res.send(JSON.parse(contents));
     });
 });
 
+app.get('/getImage', (req, res) => {
+    getSnapshot('https://api.meraki.com/api/v0/networks/L_575897802350005362/cameras/Q2FV-363D-9Z7Z/snapshot', true, 0);
+});
+
 app.get('/fallen', (req, res) => {
     console.log("fallen");
-    res.send("FALLEN")
+    res.send("FALLEN");
 })
 
 app.get('/emergency', (req, res) => {
