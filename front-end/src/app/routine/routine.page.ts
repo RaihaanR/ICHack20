@@ -91,8 +91,6 @@ export class RoutinePage implements OnInit {
         this.showSaved();
     }
 
-
-
     async showSaved() {
         const controller = new ToastController();
         const toast = await controller.create({
@@ -100,5 +98,9 @@ export class RoutinePage implements OnInit {
           duration: 2000
         });
         toast.present();
-      }
+    }
+
+    ionViewWillLeave() {
+        this.saveSettings();
+    }
 }

@@ -94,5 +94,9 @@ export class SettingsPage implements OnInit {
           duration: 2000
         });
         toast.present();
-      }
+    }
+
+    ionViewWillLeave() {
+        this.saveSettings();
+    }
 }
