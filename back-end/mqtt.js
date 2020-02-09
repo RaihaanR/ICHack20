@@ -62,8 +62,8 @@ client.on('message', function (topic, message) {
 
         }
 
-        if (i % bufferSize == 0) {
-            if (buffer.get(object.oid).coordinates.length == bufferSize) {
+        if (i % bufferSize === 0) {
+            if (buffer.get(object.oid).coordinates.length === bufferSize) {
                 console.log(object.oid)
                 console.log(buffer.get(object.oid).rollingmean, 10000*buffer.get(object.oid).signedsd)
                 console.log("==========================================================================================")
