@@ -11,8 +11,6 @@ const client = require('twilio')(accountSid, authToken);
 
 let address = "36 Star Road \n" +
     "W14 9XF \n";
-"W14 9XF \n";
-
 
 app.use(cors());
 
@@ -53,8 +51,8 @@ app.get('/getImage/:timestamp', (req, res) => {
     });
     req1.write(JSON.stringify({"timestamp": req.params.timestamp}));
     req1.end()
-})
-;
+});
+
 app.get('/routine', (req, res) => {
     fs.readFile('routine.json', function (err, contents) {
         res.send(JSON.parse(contents));
@@ -75,9 +73,9 @@ app.get('/fallen', (req, res) => {
             console.log(err)
         }
         res.send("FALLEN");
-    })
+    });
+    sendMessage();
 });
-
 
 app.get('/fallen/get', (req, res) => {
     fs.readFile("sample.txt", function (err, contents) {
@@ -85,7 +83,7 @@ app.get('/fallen/get', (req, res) => {
     });
 });
 
-app.get('/emergency', (req, res) => {
+function sendMessage() {
     client.messages
         .create({
             body: 'There is an emergency at ' + address +
@@ -93,12 +91,14 @@ app.get('/emergency', (req, res) => {
                 'Man of age 78 has collapsed. \n',
             from: '+18133286624',
             to: '+447414787312'
-        })
-        .then(message => console.log(message.sid));
+        });
+}
+
+app.get('/emergency', (req, res) => {
+    sendMessage().then(message => console.log(message.sid));
 })
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
-
 
 function addOrSetToSettings(key, value, res) {
     var json = fs.readFileSync('settings.json', 'utf8');
@@ -116,7 +116,6 @@ function addOrSetToRoutine(key, value, res) {
     res.send(routine)
 }
 
-
 const secret = 'cisco';
 const validator = '585fe1e99505ec0fcd3d7f27a1779137233bfd1c';
 const route = '/cmx';
@@ -129,11 +128,11 @@ function cmxData(data) {
 
 //**********************************************************
 
-
 app.get(route, function (req, res) {
     console.log('Validator = ' + validator);
     res.status(200).send(validator);
 });
+
 //
 // Getting the flow of data every 1 to 2 minutes
 app.post(route, function (req, res) {
