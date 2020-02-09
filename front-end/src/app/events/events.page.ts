@@ -38,7 +38,7 @@ export class EventsPage implements OnInit {
         const minuteString = timeString.substring(11, 13);
         const secondString = timeString.substring(13, 15);
         console.log(hourString + ':' + minuteString + ':' + secondString + ' ' + dateString + '-' + monthString + '-' + yearString);
-        this.mappedItems.push({
+        this.mappedItems.unshift({
             initialString: timeString,
             dateString: hourString + ':' + minuteString + ':' + secondString + ' ' + dateString + '-' + monthString + '-' + yearString
         });
