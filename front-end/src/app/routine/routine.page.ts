@@ -1,18 +1,24 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import { ToastController } from '@ionic/angular';
+import {SettingsPage} from '../settings/settings.page';
 
 interface Routine {
-    breakfast: string,
-    lunch: string,
-    dinner: string,
-    breakfastTime: string,
-    lunchTime: string,
-    dinnerTime: string,
-    wake:string,
-    wakeTime: string,
-    bed: string,
-    bedTime: string
+    breakfast: string;
+    lunch: string;
+    dinner: string;
+    breakfastTime: string;
+    breakfastRange: string;
+    lunchTime: string;
+    lunchRange: string;
+    dinnerTime: string;
+    dinnerRange: string;
+    wake: string;
+    wakeRange: string;
+    wakeTime: string;
+    bed: string;
+    bedTime: string;
+    bedRange: string;
 }
 
 @Component({
@@ -33,101 +39,110 @@ export class RoutinePage implements OnInit {
 
     public meals =
     [{
-        title: 'Breakfast', note: 'breakfast', selected: false, time: ""
-    }, 
-    {
-        title: 'Lunch', note: 'lunch', selected: false, time: ""
+        title: 'Breakfast', note: 'breakfast', selected: false, time: '', range: ''
     },
     {
-        title: 'Dinner', note: 'dinner', selected: false, time: ""
+        title: 'Lunch', note: 'lunch', selected: false, time: '', range: ''
+    },
+    {
+        title: 'Dinner', note: 'dinner', selected: false, time: '', range: ''
     }];
 
-    public bedtimes = 
+    public bedtimes =
     [{
-        title: 'Wake Up', note: 'wake', selected: false, time: ""
+        title: 'Wake Up', note: 'wake', selected: false, time: '', range: ''
     },
     {
-        title: 'Bed time', note: 'bed', selected: false, time: ""
+        title: 'Bed time', note: 'bed', selected: false, time: '', range: ''
     }];
 
-    public ranges = 
+    public ranges =
     [{
-        range: '15 minutes'
+        title: '15 minutes',
+        note: '15'
     },
     {
-        range: '30 minutes'
+        title: '30 minutes',
+        note: '30'
     },
     {
-        range: '1 hour'
+        title: '1 hour',
+        note: '60'
     }];
 
     constructor(private http: HttpClient) {
         this.http.get(this.expressURL + '/routine').subscribe(response => {
-            let routine = <Routine>response;
-            if (routine.breakfast == "true") {
-                let meal = this.meals.find(x => x.note == "breakfast")
-                meal.selected = true
-                meal.time = routine.breakfastTime
+            const routine = response as Routine;
+            if (routine.breakfast === 'true') {
+                const meal = this.meals.find(x => x.note === 'breakfast');
+                meal.selected = true;
+                meal.time = routine.breakfastTime;
+                meal.range = routine.breakfastRange;
             }
 
-            if (routine.lunch == "true") {
-                let meal = this.meals.find(x => x.note == "lunch")
-                meal.selected = true
-                meal.time = routine.lunchTime
+            if (routine.lunch === 'true') {
+                const meal = this.meals.find(x => x.note === 'lunch');
+                meal.selected = true;
+                meal.time = routine.lunchTime;
+                meal.range = routine.lunchRange;
             }
 
-            if (routine.dinner == "true") {
-                let meal = this.meals.find(x => x.note == "dinner")
-                meal.selected = true
-                meal.time = routine.dinnerTime
+            if (routine.dinner === 'true') {
+                const meal = this.meals.find(x => x.note === 'dinner');
+                meal.selected = true;
+                meal.time = routine.dinnerTime;
+                meal.range = routine.dinnerRange;
             }
 
-            if (routine.wake == "true") {
-                let time = this.bedtimes.find(x => x.note == "wake")
-                time.selected = true
-                time.time = routine.wakeTime
+            if (routine.wake === 'true') {
+                const time = this.bedtimes.find(x => x.note === 'wake');
+                time.selected = true;
+                time.time = routine.wakeTime;
+                time.range = routine.wakeRange;
             }
 
-            if (routine.bed == "true") {
-                let time = this.bedtimes.find(x => x.note == "bed")
-                time.selected = true
-                time.time = routine.bedTime
+            if (routine.bed === 'true') {
+                const time = this.bedtimes.find(x => x.note === 'bed');
+                time.selected = true;
+                time.time = routine.bedTime;
+                time.range = routine.bedRange;
             }
- 
          });
     }
 
     ngOnInit() {
     }
 
-    saveSettings() {
+    saveRoutine() {
         this.meals.forEach(x => {
             console.log(x.note);
 
-            this.http.get(this.expressURL + '/routine/'+ x.note +'/' + x.selected).subscribe(response => {
+            this.http.get(this.expressURL + '/routine/' + x.note + '/' + x.selected).subscribe(response => {
                 console.log(response);
-            }); 
+            });
+            this.http.get(this.expressURL + '/routine/' + x.note + 'Time' + '/' + x.time).subscribe(response => {
+                console.log(response);
+            });
 
-            let time = (<HTMLInputElement>document.getElementById(x.note + 'Time')).value;
-            
-            this.http.get(this.expressURL + '/routine/'+ x.note + 'Time' +'/' + time).subscribe(response => {
+            this.http.get(this.expressURL + '/routine/' + x.note + 'Range' + '/' + x.range).subscribe(response => {
                 console.log(response);
-            }); 
-        })
+            });
+        });
 
         this.bedtimes.forEach(x => {
             console.log(x.note);
 
-            this.http.get(this.expressURL + '/routine/'+ x.note +'/' + x.selected).subscribe(response => {
+            this.http.get(this.expressURL + '/routine/' + x.note + '/' + x.selected).subscribe(response => {
                 console.log(response);
-            }); 
+            });
+            this.http.get(this.expressURL + '/routine/' + x.note + 'Time' + '/' + x.time).subscribe(response => {
+                console.log(response);
+            });
 
-            let time = (<HTMLInputElement>document.getElementById(x.note + 'Time')).value;
-            
-            this.http.get(this.expressURL + '/routine/'+ x.note + 'Time' +'/' + time).subscribe(response => {
+            this.http.get(this.expressURL + '/routine/' + x.note + 'Range' + '/' + x.range).subscribe(response => {
                 console.log(response);
-            }); 
-        })
+            });
+        });
 
         this.showSaved();
     }
@@ -142,6 +157,6 @@ export class RoutinePage implements OnInit {
     }
 
     ionViewWillLeave() {
-        this.saveSettings();
+        this.saveRoutine();
     }
 }

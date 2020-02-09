@@ -9,8 +9,7 @@ const authToken = '22655eaf3b6368233f1896e883c1447b';
 const client = require('twilio')(accountSid, authToken);
 
 let address = "36 Star Road \n" +
-              "W14 9XF \n"
-
+              "W14 9XF \n";
 app.use(cors());
 
 function getSnapshot(uri, useCurrentTime, timestamp) {
@@ -59,8 +58,21 @@ app.get('/set/:param/:value', (req, res) => {
     addOrSetToSettings(param, value, res)
 });
 
+app.get('/rout/:param/:value', (req, res) => {
+    console.log(req.params)
+    const param = req.params.param;
+    const value = req.params.value;
+    addOrSetToRoutine(param, value, res)
+});
+
 app.get('/settings', (req, res) => {
     fs.readFile('settings.json', function (err, contents) {
+        res.send(JSON.parse(contents));
+    });
+});
+
+app.get('/routine', (req, res) => {
+    fs.readFile('routine.json', function (err, contents) {
         res.send(JSON.parse(contents));
     });
 });
@@ -71,9 +83,8 @@ app.get('/getImage', (req, res) => {
 
 app.get('/fallen', (req, res) => {
     console.log("fallen");
-    res.send("FALLEN");
-})
-
+    res.send("FALLEN")
+});
 app.get('/emergency', (req, res) => {
     client.messages
         .create({
@@ -84,9 +95,9 @@ app.get('/emergency', (req, res) => {
             to: '+447414787312'
         })
         .then(message => console.log(message.sid));
-})
+});
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
 
 function addOrSetToSettings(key, value, res) {
@@ -95,4 +106,12 @@ function addOrSetToSettings(key, value, res) {
     settings[key] = value;
     fs.writeFileSync('settings.json', JSON.stringify(settings), null);
     res.send(settings)
+}
+
+function addOrSetToRoutine(key, value, res) {
+    var json = fs.readFileSync('routine.json', 'utf8');
+    let routine = JSON.parse(json);
+    routine[key] = value;
+    fs.writeFileSync('routine.json', JSON.stringify(routine), null);
+    res.send(routine)
 }

@@ -3,11 +3,11 @@ import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import { ToastController } from '@ionic/angular';
 
 interface Settings {
-    detectFall: string,
-    sadness: string,
-    sadnessAction: string,
-    detectFallAction: string,
-    contactNumber: string
+    detectFall: string;
+    sadness: string;
+    sadnessAction: string;
+    detectFallAction: string;
+    contactNumber: string;
 }
 
 @Component({
@@ -15,19 +15,18 @@ interface Settings {
     templateUrl: 'settings.page.html',
     styleUrls: ['settings.page.scss']
 })
-
 export class SettingsPage implements OnInit {
 
     public actionOptions: Array<{ title: string; note: string }> = [{
         title: 'Notification',
         note: 'notify'
-    }, 
+    },
     {
-        title: 'Call Default Phone', 
+        title: 'Call Default Phone',
         note: 'call'
-    }, 
+    },
     {
-        title: 'Start video call', 
+        title: 'Start video call',
         note: 'video'
     }];
 
@@ -36,11 +35,11 @@ export class SettingsPage implements OnInit {
         note: 'detectFall',
         selected: false,
         action: ''
-    }, 
+    },
     {
-        title: 'Signs of Sadness or Loneliness', 
-        note: 'sadness', 
-        selected: false, 
+        title: 'Signs of Sadness or Loneliness',
+        note: 'sadness',
+        selected: false,
         action: ''}];
 
     expressURL = 'http://localhost:3000';
@@ -48,20 +47,20 @@ export class SettingsPage implements OnInit {
 
     constructor(private http: HttpClient) {
         this.http.get(this.expressURL + '/settings').subscribe(response => {
-           let settings = <Settings>response
-           if (settings.detectFall == "true") {
-            let detection = this.detections.find(x => x.note == "detectFall")
-            detection.selected = true
-            detection.action = settings.detectFallAction
+           const settings = response as Settings;
+           if (settings.detectFall === 'true') {
+            const detection = this.detections.find(x => x.note === 'detectFall');
+            detection.selected = true;
+            detection.action = settings.detectFallAction;
            }
 
-           if (settings.sadness == "true") {
-            let detection = this.detections.find(x => x.note == "sadness")
-            detection.selected = true
-            detection.action = settings.sadnessAction
+           if (settings.sadness === 'true') {
+            const detection = this.detections.find(x => x.note === 'sadness');
+            detection.selected = true;
+            detection.action = settings.sadnessAction;
            }
 
-           (<HTMLInputElement>document.getElementById("phone")).value = settings.contactNumber
+           (document.getElementById('phone') as HTMLInputElement).value = settings.contactNumber;
 
         });
     }
@@ -70,21 +69,21 @@ export class SettingsPage implements OnInit {
     }
 
     saveSettings() {
-        this.http.get(this.expressURL + '/set/contactNumber/' + (<HTMLInputElement>document.getElementById("phone")).value).subscribe(response => {
+        this.http.get(this.expressURL + '/set/contactNumber/' + (document.getElementById('phone')as HTMLInputElement
+        ).value).subscribe(response => {
             console.log(response);
-        }); 
+        });
 
         this.detections.forEach(x => {
             console.log(x.note);
 
-            this.http.get(this.expressURL + '/set/'+ x.note +'/' + x.selected).subscribe(response => {
+            this.http.get(this.expressURL + '/set/' + x.note + '/' + x.selected).subscribe(response => {
                 console.log(response);
-            }); 
-            
-            this.http.get(this.expressURL + '/set/'+ x.note + 'Action' +'/' + x.action).subscribe(response => {
+            });
+            this.http.get(this.expressURL + '/set/' + x.note + 'Action' + '/' + x.action).subscribe(response => {
                 console.log(response);
-            }); 
-        })
+            });
+        });
         this.showSaved();
 
     }
