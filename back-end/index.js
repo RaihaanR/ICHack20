@@ -1,6 +1,7 @@
 const express = require('express');
 const fs = require('fs');
 const cors = require('cors');
+const request = require('request');
 const app = express();
 const port = 3000;
 
@@ -12,6 +13,39 @@ function hasFallen(timestampedData) {
 
 }
 
+function getSnapshot(useCurrentTime, timestamp) {
+  var ops;
+
+  if (useCurrentTime) {
+    ops = {
+      uri: 'https:/://api.meraki.com/api/v0/networks/L_575897802350005362/cameras/Q2FV-363D-9Z7Z/snapshot',
+      method: 'POST',
+      headers: {
+        'X-Cisco-Meraki-API-Key': '96850833f85705851d736e34914eea6db9360280',
+        'Accept': 'application/json',
+        'Content-type': 'application/json'
+      }
+    }
+  } else {
+    ops = {
+      uri: 'https:/://api.meraki.com/api/v0/networks/L_575897802350005362/cameras/Q2FV-363D-9Z7Z/snapshot',
+      method: 'POST',
+      json: {
+        "timestamp": timestamp
+      },
+      headers: {
+        'X-Cisco-Meraki-API-Key': '96850833f85705851d736e34914eea6db9360280',
+        'Accept': 'application/json',
+        'Content-type': 'application/json'
+      }
+    }
+  }
+
+  request(ops, function (err, response) {
+      console.log(response);
+      return;
+  })
+}
 
 app.get('/', (req, res) => res.send('Hello World!'))
 
