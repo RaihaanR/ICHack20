@@ -9,7 +9,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.17.1",
-    "mqtt": "^3.0.0"
+    "mqtt": "^3.0.0",
+    "request": "^2.88.0",
+    "twilio": "^3.39.4"
   }
 }
