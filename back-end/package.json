@@ -13,7 +13,11 @@
     "express": "^4.17.1",
     "mqtt": "^3.0.0",
     "request": "^2.88.0",
-    "twilio": "^3.39.4",
-    "body-parser": "latest"
+    "twilio": "^3.39.4"
+  },
+  "devDependencies": {
+    "body-parser": "latest",
+    "follow-redirects": "^1.10.0",
+    "twilio": "^3.39.4"
   }
 }
