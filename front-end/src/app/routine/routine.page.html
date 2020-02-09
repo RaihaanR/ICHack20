@@ -41,7 +41,7 @@
             </ion-item>
             <ion-item [hidden]="!time.selected" lines="none">
                 <ion-label>&nbsp; &nbsp;{{time.title}} Time</ion-label>
-                <ion-datetime display-format="h:mm A" picker-format="h:mm A" value="1990-02-19T08:00Z"></ion-datetime>
+                <ion-datetime display-format="h:mm A" picker-format="h:mm A" id="{{time.note}}Time" value={{time.time}}></ion-datetime>
             </ion-item>
             <ion-item [hidden]="!time.selected" lines="none">
                 <ion-label>&nbsp; &nbsp;Time range allowed either side</ion-label>
