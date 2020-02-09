@@ -10,6 +10,7 @@ const authToken = '22655eaf3b6368233f1896e883c1447b';
 const client = require('twilio')(accountSid, authToken);
 
 let address = "36 Star Road \n" +
+              "W14 9XF \n";
     "W14 9XF \n";
 
 app.use(cors());
@@ -51,10 +52,14 @@ app.get('/getImage/:timestamp', (req, res) => {
     req1.write(JSON.stringify({"timestamp": req.params.timestamp}));
     req1.end()
 });
-
+app.get('/routine', (req, res) => {
+    fs.readFile('routine.json', function (err, contents) {
+        res.send(JSON.parse(contents));
+    });
+});
 
 function pad(n) {
-    return n<10 ? '0'+n : n
+    return n < 10 ? '0' + n : n
 }
 
 app.get('/fallen', (req, res) => {
@@ -62,8 +67,8 @@ app.get('/fallen', (req, res) => {
     let date = new Date();
     let data = pad(date.getFullYear()) + pad(date.getMonth() + 1) + pad(date.getDate()) + "T" + pad(date.getHours()) + pad(date.getMinutes()) + pad(date.getSeconds());
     console.log(data);
-    fs.appendFile('sample.txt',data + ",", function (err) {
-        if(err){
+    fs.appendFile('sample.txt', data + ",", function (err) {
+        if (err) {
             console.log(err)
         }
         res.send("FALLEN");
@@ -87,9 +92,9 @@ app.get('/emergency', (req, res) => {
             to: '+447414787312'
         })
         .then(message => console.log(message.sid));
-});
+})
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 
 
 function addOrSetToSettings(key, value, res) {
@@ -99,3 +104,42 @@ function addOrSetToSettings(key, value, res) {
     fs.writeFileSync('settings.json', JSON.stringify(settings), null);
     res.send(settings)
 }
+
+function addOrSetToRoutine(key, value, res) {
+    var json = fs.readFileSync('routine.json', 'utf8');
+    let routine = JSON.parse(json);
+    routine[key] = value;
+    fs.writeFileSync('routine.json', JSON.stringify(routine), null);
+    res.send(routine)
+}
+
+
+const secret = 'cisco';
+const validator = '585fe1e99505ec0fcd3d7f27a1779137233bfd1c';
+const route = '/cmx';
+
+// All CMX JSON data will end up here. Send it to a database or whatever you fancy.
+// data format specifications: https://documentation.meraki.com/MR/Monitoring_and_Reporting/CMX_Analytics#Version_2.0
+function cmxData(data) {
+    console.log('JSON Feed: ' + JSON.stringify(data, null, 2));
+}
+
+//**********************************************************
+
+
+app.get(route, function (req, res) {
+    console.log('Validator = ' + validator);
+    res.status(200).send(validator);
+});
+//
+// Getting the flow of data every 1 to 2 minutes
+app.post(route, function (req, res) {
+    console.log("post")
+    if (req.body.secret === secret) {
+        console.log('Secret verified');
+        cmxData(req.body);
+    } else {
+        console.log('Secret was invalid');
+    }
+    res.status(200);
+});
