@@ -30,10 +30,10 @@ export class RoutinePage implements OnInit {
 
     public bedtimes = 
     [{
-        title: 'Wake up', note: 'wake', selected: false
+        title: 'Wake Up', note: 'wake', selected: false, time: ""
     },
     {
-        title: 'Bed time', note: 'bed', selected: false
+        title: 'Bed time', note: 'bed', selected: false, time: ""
     }];
 
     public ranges = 
@@ -66,6 +66,18 @@ export class RoutinePage implements OnInit {
                 meal.selected = true
                 meal.time = response.dinnerTime
             }
+
+            if (response.wake == "true") {
+                let time = this.bedtimes.find(x => x.note == "wake")
+                time.selected = true
+                time.time = response.wakeTime
+            }
+
+            if (response.bed == "true") {
+                let time = this.bedtimes.find(x => x.note == "bed")
+                time.selected = true
+                time.time = response.bedTime
+            }
  
          });
     }
@@ -75,6 +87,20 @@ export class RoutinePage implements OnInit {
 
     saveSettings() {
         this.meals.forEach(x => {
+            console.log(x.note);
+
+            this.http.get(this.expressURL + '/routine/'+ x.note +'/' + x.selected).subscribe(response => {
+                console.log(response);
+            }); 
+
+            let time = document.getElementById(x.note + 'Time').value;
+            
+            this.http.get(this.expressURL + '/routine/'+ x.note + 'Time' +'/' + time).subscribe(response => {
+                console.log(response);
+            }); 
+        })
+
+        this.bedtimes.forEach(x => {
             console.log(x.note);
 
             this.http.get(this.expressURL + '/routine/'+ x.note +'/' + x.selected).subscribe(response => {
