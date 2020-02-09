@@ -40,7 +40,8 @@ export class SettingsPage implements OnInit {
         title: 'Signs of Sadness or Loneliness',
         note: 'sadness',
         selected: false,
-        action: ''}];
+        action: ''
+    }];
 
     expressURL = 'http://localhost:3000';
     phone: any;

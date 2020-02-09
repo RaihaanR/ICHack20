@@ -1,1 +1,1 @@
-{"detectFall":"false","sadness":"true","sadnessAction":"video","detectFallAction":"call","contactNumber":"12345678990"}
+{"detectFall":"true","sadness":"true","sadnessAction":"video","detectFallAction":"notify","contactNumber":"12345678990"}

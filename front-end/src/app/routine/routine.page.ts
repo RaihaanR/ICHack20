@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import { ToastController } from '@ionic/angular';
-import {SettingsPage} from '../settings/settings.page';
 
 interface Routine {
     breakfast: string;
@@ -120,6 +119,7 @@ export class RoutinePage implements OnInit {
             this.http.get(this.expressURL + '/routine/' + x.note + '/' + x.selected).subscribe(response => {
                 console.log(response);
             });
+
             this.http.get(this.expressURL + '/routine/' + x.note + 'Time' + '/' + x.time).subscribe(response => {
                 console.log(response);
             });
