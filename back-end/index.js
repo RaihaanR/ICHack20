@@ -118,7 +118,7 @@ app.listen(port, () => {
 });
 
 function addOrSetToSettings(key, value, res) {
-    var json = fs.readFileSync('settings.json', 'utf8');
+    const json = fs.readFileSync('settings.json', 'utf8');
     let settings = JSON.parse(json);
     settings[key] = value;
     fs.writeFileSync('settings.json', JSON.stringify(settings), null);
@@ -126,7 +126,7 @@ function addOrSetToSettings(key, value, res) {
 }
 
 function addOrSetToRoutine(key, value, res) {
-    var json = fs.readFileSync('routine.json', 'utf8');
+    const json = fs.readFileSync('routine.json', 'utf8');
     let routine = JSON.parse(json);
     routine[key] = value;
     fs.writeFileSync('routine.json', JSON.stringify(routine), null);
@@ -143,22 +143,24 @@ function cmxData(data) {
     console.log('JSON Feed: ' + JSON.stringify(data, null, 2));
 }
 
-//**********************************************************
-
-app.get(route, function (req, res) {
-    console.log('Validator = ' + validator);
-    res.status(200).send(validator);
-});
-
-//
-// Getting the flow of data every 1 to 2 minutes
-app.post(route, function (req, res) {
-    console.log("post");
-    if (req.body.secret === secret) {
-        console.log('Secret verified');
-        cmxData(req.body);
+app.get('/bluetooth', (req, res) => {
+    // req.query.q.toString()
+    const macAddress = "c0:ee:fb:ab:90:98"
+    let jsonString = req.query.q 
+    let jsonObject = JSON.parse(jsonString.toString())
+    let observations = jsonObject.data.observations
+    let clientMacObjects  = []
+    observations.forEach(obj => {
+        if (obj.clientMac === macAddress) {
+            clientMacObjects.push(obj)
+        }
+    })
+    let clientLocation = clientMacObjects[0].location
+    let latDiff = clientLocation.lat - 51.300
+    let longDiff = clientLocation.lng - -0.177
+    if (Math.abs(latDiff) > 0.05 || Math.abs(longDiff) > 0.05) {
+        res.send(true)
     } else {
-        console.log('Secret was invalid');
+        res.send(false)
     }
-    res.status(200);
-});
+})
