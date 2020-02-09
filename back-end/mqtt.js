@@ -61,7 +61,7 @@ client.on('message', function (topic, message) {
             if (buffer.get(object.oid).coordinates.length === bufferSize) {
                 sds.push(10000*buffer.get(object.oid).signedsd)
                 if(hasFallen()) {
-                    request("http://localhost:3000/fallen")
+                    request("http://209.97.190.210:4000/fallen")
                 }
                 // console.log(up)
                 // console.log(buffer.get(object.oid).rollingmean, 10000*buffer.get(object.oid).signedsd)

@@ -44,7 +44,6 @@ app.get('/getImage/:timestamp', (req, res) => {
         }
     };
     const req1 = https.request(options, res1 => {
-        console.log(`statusCode: ${res1.statusCode}`);
 
         res1.on('data', d => {
             res.send(JSON.parse(d.toString()))
@@ -74,6 +73,27 @@ app.get('/fallen', (req, res) => {
         if (err) {
             console.log(err)
         }
+        header = {"Content-Type": "application/json; charset=utf-8",
+            "Authorization": "Basic ZGM3ODU4ZmMtNTBkYS00NDVkLTg4OWEtNjg0MWI1NTgyMTFm"}
+
+        payload = {"app_id": "2afa271a-7f42-4fe7-ba5c-a999051d0856",
+            "included_segments": ["All"],
+            "small_icon": "ic_launcher",
+            "large_icon": "https://www.filepicker.io/api/file/24cBwwNQTiRE88fE9TRA",
+            "headings": {"en": "Fall Detected"},
+            "contents": {"en": "Potential Fall detected. Click for more info"}}
+
+        req = request.post("https://onesignal.com/api/v1/notifications",{
+            json: payload,
+            headers: header
+        }, (error, res, body) => {
+            if (error) {
+                console.error(error)
+                return
+            }
+            console.log(`statusCode: ${res.statusCode}`)
+            console.log(body)
+        });
         res.send("FALLEN");
     })
 });
