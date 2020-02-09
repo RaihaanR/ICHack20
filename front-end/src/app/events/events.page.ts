@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {NavController} from '@ionic/angular';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 
 @Component({
@@ -11,13 +12,15 @@ import {NavController} from '@ionic/angular';
 export class EventsPage implements OnInit {
     private fallenItems: any;
     private mappedItems = [];
-    expressURL = 'http://localhost:3000';
+    expressURL = 'http://209.97.190.210:4000';
 
     public items: Array<{ title: string; note: string }> = [];
 
-    constructor(public navCtrl: NavController, private http: HttpClient) {
+    constructor(public navCtrl: NavController, private http: HttpClient, private iab: InAppBrowser) {
         this.http.get(this.expressURL + '/fallen/get').subscribe(response => {
+            // @ts-ignore
             console.log(response.data);
+            // @ts-ignore
             this.fallenItems = response.data.split(',');
             this.fallenItems.pop();
             this.fallenItems.forEach(x => this.convertToDate(x));
@@ -44,7 +47,9 @@ export class EventsPage implements OnInit {
     doRefresh(event) {
         console.log('Begin async operation');
         this.http.get(this.expressURL + '/fallen/get').subscribe(response => {
+            // @ts-ignore
             console.log(response.data);
+            // @ts-ignore
             this.fallenItems = response.data.split(',');
             this.fallenItems.pop();
             this.fallenItems.forEach(x => this.convertToDate(x));
@@ -58,9 +63,16 @@ export class EventsPage implements OnInit {
 
     openImage(initialString: string) {
         this.http.get(this.expressURL + '/getImage/' + initialString + 'Z').subscribe(response => {
-            console.log(response);
-            localStorage.setItem('imageURL', initialString);
-            this.navCtrl.navigateForward('/list');
+            // console.log(response);
+            // window.href = (response.url);
+            // localStorage.setItem('imageURL', initialString);
+            // @ts-ignore
+            console.log(response.url);
+            // @ts-ignore
+            window.open(response.url.toString(), '_system');
+            // @ts-ignore
+            // const browser = this.iab.create(response.url.toString());
+            // this.navCtrl.navigateForward(response.url);
         });
     }
 

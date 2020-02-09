@@ -29,7 +29,7 @@ interface Routine {
 export class RoutinePage implements OnInit {
     private alertTriggers = [];
 
-    expressURL = 'http://localhost:3000';
+    expressURL = 'http://209.97.190.210:4000';
 
     public actionOptions: Array<{ title: string; note: string }> = [{
         title: 'Notification',

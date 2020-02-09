@@ -10,8 +10,9 @@ const authToken = '22655eaf3b6368233f1896e883c1447b';
 const client = require('twilio')(accountSid, authToken);
 
 let address = "36 Star Road \n" +
-              "W14 9XF \n";
     "W14 9XF \n";
+"W14 9XF \n";
+
 
 app.use(cors());
 
@@ -47,11 +48,13 @@ app.get('/getImage/:timestamp', (req, res) => {
 
         res1.on('data', d => {
             res.send(JSON.parse(d.toString()))
+
         })
     });
     req1.write(JSON.stringify({"timestamp": req.params.timestamp}));
     req1.end()
-});
+})
+;
 app.get('/routine', (req, res) => {
     fs.readFile('routine.json', function (err, contents) {
         res.send(JSON.parse(contents));

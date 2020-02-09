@@ -43,7 +43,7 @@ export class SettingsPage implements OnInit {
         action: ''
     }];
 
-    expressURL = 'http://localhost:3000';
+    expressURL = 'http://209.97.190.210:4000';
     phone: any;
 
     constructor(private http: HttpClient) {
