@@ -48,11 +48,11 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <ion-list>
-    <ion-item *ngFor="let item of items" href="https://google.com">
-      {{item.title}}
-      <div class="item-note" slot="end">
-        {{item.note}}
-      </div>
+    <ion-item *ngFor="let item of mappedItems" (click)="openImage(item.initialString)">
+      {{item.dateString}}
+<!--      <div class="item-note" slot="end">-->
+<!--        {{item.dateString}}-->
+<!--      </div>-->
     </ion-item>
   </ion-list>
 <!--   

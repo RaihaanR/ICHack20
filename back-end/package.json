@@ -14,5 +14,8 @@
     "mqtt": "^3.0.0",
     "request": "^2.88.0",
     "twilio": "^3.39.4"
+  },
+  "devDependencies": {
+    "follow-redirects": "^1.10.0"
   }
 }
