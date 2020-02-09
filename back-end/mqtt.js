@@ -53,9 +53,9 @@ client.on('message', function (topic, message) {
                     sqsum += (coordinate.y0 - coordinate.y1) * (coordinate.y0 - coordinate.y1)
                 })
 
-                data.rollingmean = sum / 15
-                let sign = data.coordinates[0] - data.coordinates[9]  < 0 ? 1 : -1
-                data.signedsd = (sqsum / 15) - (data.rollingmean * data.rollingmean)
+                data.rollingmean = sum / bufferSize
+                let sign = data.coordinates[0] - data.coordinates[bufferSize-1]  < 0 ? 1 : -1
+                data.signedsd = (sqsum / bufferSize) - (data.rollingmean * data.rollingmean)
                 data.signedsd = data.signedsd * sign
                 meanList.push(data.rollingmean)
             }
