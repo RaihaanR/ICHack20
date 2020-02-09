@@ -21,7 +21,7 @@
             </ion-item>
             <ion-item [hidden]="!meal.selected" lines="none">
                 <ion-label> &nbsp; &nbsp;{{meal.title}} Time</ion-label>
-                <ion-datetime display-format="h:mm A" picker-format="h:mm A" value="1990-02-19T08:00Z"></ion-datetime>
+                <ion-datetime display-format="h:mm A" picker-format="h:mm A" id="{{meal.note}}Time" value={{meal.time}}></ion-datetime>
             </ion-item>
             <ion-item [hidden]="!meal.selected" lines="none">
                 <ion-label> &nbsp; &nbsp;Time range allowed either side</ion-label>
