@@ -66,7 +66,7 @@ app.get('/settings', (req, res) => {
 });
 
 app.get('/getImage', (req, res) => {
-    getSnapshot('https://api.meraki.com/api/v0/networks/L_575897802350005362/cameras/Q2FV-363D-9Z7Z/snapshot', true, 0);
+    getSnapshot('https://api.meraki.com/api/v0/networks/L_575897802350005362/cameras/Q2FV-363D-9Z7Z/snapshot', false, '20200208T183000Z');
 });
 
 app.get('/fallen', (req, res) => {
