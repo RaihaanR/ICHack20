@@ -30,8 +30,9 @@ app.get('/settings', (req, res) => {
 });
 
 app.get('/fallen', (req, res) => {
-    res.send()
-}
+    console.log("fallen");
+    res.send("FALLEN")
+})
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 

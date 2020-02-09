@@ -1,4 +1,5 @@
 let mqtt = require('mqtt');
+const request = require("request");
 let client = mqtt.connect('mqtt://209.97.190.210');
 const bufferSize = 15
 let sds = []
@@ -12,7 +13,11 @@ client.on('connect', function () {
 })
 
 function hasFallen() {
-
+    let up = true
+    if (sds[sds.length-1] - sds[sds.length-2] < -23) {
+        up = false
+    }
+    return !up
 }
 
 let i = 1
@@ -55,15 +60,12 @@ client.on('message', function (topic, message) {
         if (i % bufferSize === 0) {
             if (buffer.get(object.oid).coordinates.length === bufferSize) {
                 sds.push(10000*buffer.get(object.oid).signedsd)
-                let upDown = sds[sds.length-1] - sds[sds.length-2]
-                let up = true
-                if (upDown < -23) {
-                    up = false
+                if(hasFallen()) {
+                    request("http://localhost:3000/fallen")
                 }
-                console.log(upDown)
-                console.log(up)
+                // console.log(up)
                 // console.log(buffer.get(object.oid).rollingmean, 10000*buffer.get(object.oid).signedsd)
-                console.log("==========================================================================================")
+                // console.log("==========================================================================================")
             }
         }
     })
