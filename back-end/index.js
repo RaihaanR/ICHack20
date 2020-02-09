@@ -58,7 +58,7 @@ app.get('/set/:param/:value', (req, res) => {
     addOrSetToSettings(param, value, res)
 });
 
-app.get('/rout/:param/:value', (req, res) => {
+app.get('/routine/:param/:value', (req, res) => {
     console.log(req.params)
     const param = req.params.param;
     const value = req.params.value;
