@@ -1,13 +1,21 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
-import { EDEADLK } from 'constants';
 import { ToastController } from '@ionic/angular';
+
+interface Settings {
+    detectFall: string,
+    sadness: string,
+    sadnessAction: string,
+    detectFallAction: string,
+    contactNumber: string
+}
 
 @Component({
     selector: 'app-list',
     templateUrl: 'settings.page.html',
     styleUrls: ['settings.page.scss']
 })
+
 export class SettingsPage implements OnInit {
 
     public actionOptions: Array<{ title: string; note: string }> = [{
@@ -35,31 +43,25 @@ export class SettingsPage implements OnInit {
         selected: false, 
         action: ''}];
 
-    // public phoneNumber = {
-    //     title: 'Contact Number',
-    //     note: 'contactNumber',
-    //     number: '012345678910'
-    // };
-
     expressURL = 'http://localhost:3000';
     phone: any;
 
     constructor(private http: HttpClient) {
         this.http.get(this.expressURL + '/settings').subscribe(response => {
-           console.log(response);
-           if (response.detectFall == "true") {
+           let settings = <Settings>response
+           if (settings.detectFall == "true") {
             let detection = this.detections.find(x => x.note == "detectFall")
             detection.selected = true
-            detection.action = response.detectFallAction
+            detection.action = settings.detectFallAction
            }
 
-           if (response.sadness == "true") {
+           if (settings.sadness == "true") {
             let detection = this.detections.find(x => x.note == "sadness")
             detection.selected = true
-            detection.action = response.sadnessAction
+            detection.action = settings.sadnessAction
            }
 
-           document.getElementById("phone").value = response.contactNumber
+           (<HTMLInputElement>document.getElementById("phone")).value = settings.contactNumber
 
         });
     }
@@ -68,7 +70,7 @@ export class SettingsPage implements OnInit {
     }
 
     saveSettings() {
-        this.http.get(this.expressURL + '/set/contactNumber/' + document.getElementById("phone").value).subscribe(response => {
+        this.http.get(this.expressURL + '/set/contactNumber/' + (<HTMLInputElement>document.getElementById("phone")).value).subscribe(response => {
             console.log(response);
         }); 
 
