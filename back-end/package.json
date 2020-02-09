@@ -16,8 +16,8 @@
     "twilio": "^3.39.4"
   },
   "devDependencies": {
+    "body-parser": "latest",
     "follow-redirects": "^1.10.0",
-    "twilio": "^3.39.4",
-    "body-parser": "latest"
+    "twilio": "^3.39.4"
   }
 }
