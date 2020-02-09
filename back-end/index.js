@@ -96,3 +96,34 @@ function addOrSetToSettings(key, value, res) {
     fs.writeFileSync('settings.json', JSON.stringify(settings), null);
     res.send(settings)
 }
+
+
+const secret = 'cisco';
+const validator = '585fe1e99505ec0fcd3d7f27a1779137233bfd1c';
+const route = '/cmx';
+
+// All CMX JSON data will end up here. Send it to a database or whatever you fancy.
+// data format specifications: https://documentation.meraki.com/MR/Monitoring_and_Reporting/CMX_Analytics#Version_2.0
+function cmxData(data) {
+    console.log('JSON Feed: ' + JSON.stringify(data, null, 2));
+}
+
+//**********************************************************
+
+
+app.get(route, function(req, res) {
+    console.log('Validator = ' + validator);
+    res.status(200).send(validator);
+});
+//
+// Getting the flow of data every 1 to 2 minutes
+app.post(route, function(req, res) {
+    console.log("post")
+    if (req.body.secret === secret) {
+        console.log('Secret verified');
+        cmxData(req.body);
+    } else {
+        console.log('Secret was invalid');
+    }
+    res.status(200);
+});
