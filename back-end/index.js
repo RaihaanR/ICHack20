@@ -15,6 +15,21 @@ function hasFallen(timestampedData) {
 
 app.get('/', (req, res) => res.send('Hello World!'))
 
+app.get('/routine/:param/:value', (req, res) => {
+    console.log("dsfds")
+    console.log(req.params)
+    const param = req.params.param;
+    const value = req.params.value;
+    addOrSetToRoutine(param, value, res)
+});
+
+
+app.get('/routine', (req, res) => {
+    fs.readFile('routine.json', function (err, contents) {
+        res.send(JSON.parse(contents));
+    });
+});
+
 app.get('/set/:param/:value', (req, res) => {
     console.log(req.params)
     const param = req.params.param;
@@ -42,5 +57,13 @@ function addOrSetToSettings(key, value, res) {
     let settings = JSON.parse(json);
     settings[key] = value;
     fs.writeFileSync('settings.json', JSON.stringify(settings), null);
+    res.send(settings)
+}
+
+function addOrSetToRoutine(key, value, res) {
+    var json = fs.readFileSync('routine.json', 'utf8');
+    let settings = JSON.parse(json);
+    settings[key] = value;
+    fs.writeFileSync('routine.json', JSON.stringify(settings), null);
     res.send(settings)
 }
