@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {NavController} from '@ionic/angular';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 
 @Component({
@@ -16,7 +15,7 @@ export class EventsPage implements OnInit {
 
     public items: Array<{ title: string; note: string }> = [];
 
-    constructor(public navCtrl: NavController, private http: HttpClient, private iab: InAppBrowser) {
+    constructor(public navCtrl: NavController, private http: HttpClient) {
         this.http.get(this.expressURL + '/fallen/get').subscribe(response => {
             // @ts-ignore
             console.log(response.data);

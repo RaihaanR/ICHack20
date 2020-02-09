@@ -11,8 +11,6 @@ const client = require('twilio')(accountSid, authToken);
 
 let address = "36 Star Road \n" +
     "W14 9XF \n";
-"W14 9XF \n";
-
 
 app.use(cors());
 
@@ -22,12 +20,28 @@ app.get('/set/:param/:value', (req, res) => {
     console.log(req.params);
     const param = req.params.param;
     const value = req.params.value;
-    addOrSetToSettings(param, value, res)
+    addOrSetToSettings(param, value, res);
 });
 
 app.get('/settings', (req, res) => {
     fs.readFile('settings.json', function (err, contents) {
         res.send(JSON.parse(contents));
+    });
+});
+
+app.get('/numPeople', (req, res) => {
+    const options = {
+        uri: 'https://api.meraki.com/api/v0/devices/Q2FV-363D-9Z7Z/camera/analytics/live',
+        method: 'GET',
+        headers: {
+            'X-Cisco-Meraki-API-Key': '96850833f85705851d736e34914eea6db9360280',
+            'Accept': 'application/json'
+        }
+    };
+
+    request(options, (err, resource, body) => {
+        const countObj = JSON.parse(body.toString())["zones"]["0"]["person"];
+        res.send(countObj);
     });
 });
 
@@ -40,20 +54,19 @@ app.get('/getImage/:timestamp', (req, res) => {
         headers: {
             'X-Cisco-Meraki-API-Key': '96850833f85705851d736e34914eea6db9360280',
             'Accept': 'application/json',
-            'Content-type': 'application/json',
+            'Content-type': 'application/json'
         }
     };
     const req1 = https.request(options, res1 => {
 
         res1.on('data', d => {
-            res.send(JSON.parse(d.toString()))
-
+            res.send(JSON.parse(d.toString()));
         })
     });
     req1.write(JSON.stringify({"timestamp": req.params.timestamp}));
-    req1.end()
-})
-;
+    req1.end();
+});
+
 app.get('/routine', (req, res) => {
     fs.readFile('routine.json', function (err, contents) {
         res.send(JSON.parse(contents));
@@ -95,9 +108,9 @@ app.get('/fallen', (req, res) => {
             console.log(body)
         });
         res.send("FALLEN");
-    })
+    });
+    sendMessage();
 });
-
 
 app.get('/fallen/get', (req, res) => {
     fs.readFile("sample.txt", function (err, contents) {
@@ -105,7 +118,7 @@ app.get('/fallen/get', (req, res) => {
     });
 });
 
-app.get('/emergency', (req, res) => {
+function sendMessage() {
     client.messages
         .create({
             body: 'There is an emergency at ' + address +
@@ -113,29 +126,32 @@ app.get('/emergency', (req, res) => {
                 'Man of age 78 has collapsed. \n',
             from: '+18133286624',
             to: '+447414787312'
-        })
-        .then(message => console.log(message.sid));
-})
+        });
+}
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+app.get('/emergency', (req, res) => {
+    sendMessage().then(message => console.log(message.sid));
+});
 
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}!`);
+});
 
 function addOrSetToSettings(key, value, res) {
-    var json = fs.readFileSync('settings.json', 'utf8');
+    const json = fs.readFileSync('settings.json', 'utf8');
     let settings = JSON.parse(json);
     settings[key] = value;
     fs.writeFileSync('settings.json', JSON.stringify(settings), null);
-    res.send(settings)
+    res.send(settings);
 }
 
 function addOrSetToRoutine(key, value, res) {
-    var json = fs.readFileSync('routine.json', 'utf8');
+    const json = fs.readFileSync('routine.json', 'utf8');
     let routine = JSON.parse(json);
     routine[key] = value;
     fs.writeFileSync('routine.json', JSON.stringify(routine), null);
-    res.send(routine)
+    res.send(routine);
 }
-
 
 const secret = 'cisco';
 const validator = '585fe1e99505ec0fcd3d7f27a1779137233bfd1c';
@@ -147,22 +163,24 @@ function cmxData(data) {
     console.log('JSON Feed: ' + JSON.stringify(data, null, 2));
 }
 
-//**********************************************************
-
-
-app.get(route, function (req, res) {
-    console.log('Validator = ' + validator);
-    res.status(200).send(validator);
-});
-//
-// Getting the flow of data every 1 to 2 minutes
-app.post(route, function (req, res) {
-    console.log("post")
-    if (req.body.secret === secret) {
-        console.log('Secret verified');
-        cmxData(req.body);
+app.get('/bluetooth', (req, res) => {
+    // req.query.q.toString()
+    const macAddress = "c0:ee:fb:ab:90:98"
+    let jsonString = req.query.q 
+    let jsonObject = JSON.parse(jsonString.toString())
+    let observations = jsonObject.data.observations
+    let clientMacObjects  = []
+    observations.forEach(obj => {
+        if (obj.clientMac === macAddress) {
+            clientMacObjects.push(obj)
+        }
+    })
+    let clientLocation = clientMacObjects[0].location
+    let latDiff = clientLocation.lat - 51.300
+    let longDiff = clientLocation.lng - -0.177
+    if (Math.abs(latDiff) > 0.05 || Math.abs(longDiff) > 0.05) {
+        res.send(true)
     } else {
-        console.log('Secret was invalid');
+        res.send(false)
     }
-    res.status(200);
-});
+})
