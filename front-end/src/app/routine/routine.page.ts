@@ -2,11 +2,25 @@ import {Component, OnInit} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import { ToastController } from '@ionic/angular';
 
+interface Routine {
+    breakfast: string,
+    lunch: string,
+    dinner: string,
+    breakfastTime: string,
+    lunchTime: string,
+    dinnerTime: string,
+    wake:string,
+    wakeTime: string,
+    bed: string,
+    bedTime: string
+}
+
 @Component({
     selector: 'app-list',
     templateUrl: 'routine.page.html',
     styleUrls: ['routine.page.scss']
 })
+
 export class RoutinePage implements OnInit {
     private alertTriggers = [];
 
@@ -49,34 +63,35 @@ export class RoutinePage implements OnInit {
 
     constructor(private http: HttpClient) {
         this.http.get(this.expressURL + '/routine').subscribe(response => {
-            if (response.breakfast == "true") {
+            let routine = <Routine>response;
+            if (routine.breakfast == "true") {
                 let meal = this.meals.find(x => x.note == "breakfast")
                 meal.selected = true
-                meal.time = response.breakfastTime
+                meal.time = routine.breakfastTime
             }
 
-            if (response.lunch == "true") {
+            if (routine.lunch == "true") {
                 let meal = this.meals.find(x => x.note == "lunch")
                 meal.selected = true
-                meal.time = response.lunchTime
+                meal.time = routine.lunchTime
             }
 
-            if (response.dinner == "true") {
+            if (routine.dinner == "true") {
                 let meal = this.meals.find(x => x.note == "dinner")
                 meal.selected = true
-                meal.time = response.dinnerTime
+                meal.time = routine.dinnerTime
             }
 
-            if (response.wake == "true") {
+            if (routine.wake == "true") {
                 let time = this.bedtimes.find(x => x.note == "wake")
                 time.selected = true
-                time.time = response.wakeTime
+                time.time = routine.wakeTime
             }
 
-            if (response.bed == "true") {
+            if (routine.bed == "true") {
                 let time = this.bedtimes.find(x => x.note == "bed")
                 time.selected = true
-                time.time = response.bedTime
+                time.time = routine.bedTime
             }
  
          });
@@ -93,7 +108,7 @@ export class RoutinePage implements OnInit {
                 console.log(response);
             }); 
 
-            let time = document.getElementById(x.note + 'Time').value;
+            let time = (<HTMLInputElement>document.getElementById(x.note + 'Time')).value;
             
             this.http.get(this.expressURL + '/routine/'+ x.note + 'Time' +'/' + time).subscribe(response => {
                 console.log(response);
@@ -107,7 +122,7 @@ export class RoutinePage implements OnInit {
                 console.log(response);
             }); 
 
-            let time = document.getElementById(x.note + 'Time').value;
+            let time = (<HTMLInputElement>document.getElementById(x.note + 'Time')).value;
             
             this.http.get(this.expressURL + '/routine/'+ x.note + 'Time' +'/' + time).subscribe(response => {
                 console.log(response);
