@@ -1,6 +1,8 @@
 let mqtt = require('mqtt');
 let client = mqtt.connect('mqtt://209.97.190.210');
 const bufferSize = 15
+let sds = []
+
 // buffer data for an oid {expiry: 1000, size: 100, [{x0, y0, x1, y1, ts}, ...]}
 // buffer - map of oid => {expiry: 1000, size: 100, [{x0, y0, x1, y1, ts}, ...]}
 let meanList = []
@@ -9,21 +11,8 @@ client.on('connect', function () {
     client.subscribe('/merakimv/Q2FV-363D-9Z7Z/raw_detections')
 })
 
-function getTimedData(responseJSONList, oid) {
-    let timedData = [] // {x0, y0, x1, y1, ts}
-    for (let x = 0; x < responseJSONList.length; ++x) {
-        let response = responseJSONList[x]
-        let ts = response.ts
-        for (let y = 0; y < response.objects.length; ++y) {
-            let object = response.objects[y]
-            if (object.oid === oid) {
-                let datapoint = {x0: object.x0, y0: object.y0, x1: object.x1, y1: object.y1, ts}
-                timedData.push(datapoint)
-            }
-        }
-    }
+function hasFallen() {
 
-    return timedData
 }
 
 let i = 1
@@ -31,6 +20,7 @@ client.on('message', function (topic, message) {
     let jsonObject = JSON.parse(message.toString())
     let objects = jsonObject.objects
     ++i
+
     objects.forEach(object=> {
         let coordinate = {x0: object.x0, y0: object.y0, x1: object.x1, y1: object.y1, ts: jsonObject.ts}
         if (!buffer.has(object.oid)) {
@@ -64,12 +54,18 @@ client.on('message', function (topic, message) {
 
         if (i % bufferSize === 0) {
             if (buffer.get(object.oid).coordinates.length === bufferSize) {
-                console.log(object.oid)
-                console.log(buffer.get(object.oid).rollingmean, 10000*buffer.get(object.oid).signedsd)
+                sds.push(10000*buffer.get(object.oid).signedsd)
+                let upDown = sds[sds.length-1] - sds[sds.length-2]
+                let up = true
+                if (upDown < -23) {
+                    up = false
+                }
+                console.log(upDown)
+                console.log(up)
+                // console.log(buffer.get(object.oid).rollingmean, 10000*buffer.get(object.oid).signedsd)
                 console.log("==========================================================================================")
             }
         }
-
     })
 
 
