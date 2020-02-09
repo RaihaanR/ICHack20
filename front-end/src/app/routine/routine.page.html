@@ -21,12 +21,12 @@
             </ion-item>
             <ion-item [hidden]="!meal.selected" lines="none">
                 <ion-label> &nbsp; &nbsp;{{meal.title}} Time</ion-label>
-                <ion-datetime display-format="h:mm A" picker-format="h:mm A" id="{{meal.note}}Time" value={{meal.time}}></ion-datetime>
+                <ion-datetime display-format="h:mm A" picker-format="h:mm A" [(ngModel)]="meal.time"></ion-datetime>
             </ion-item>
             <ion-item [hidden]="!meal.selected" lines="none">
                 <ion-label> &nbsp; &nbsp;Time range allowed either side</ion-label>
-                <ion-select interface="popover">
-                    <ion-select-option *ngFor="let item of ranges" [value]="item.range">{{item.range}}</ion-select-option>
+                <ion-select [(ngModel)]="meal.range" interface="popover">
+                    <ion-select-option *ngFor="let item of ranges" [value]="item.note">{{item.title}}</ion-select-option>
                 </ion-select>
             </ion-item>
         </div>
@@ -41,18 +41,18 @@
             </ion-item>
             <ion-item [hidden]="!time.selected" lines="none">
                 <ion-label>&nbsp; &nbsp;{{time.title}} Time</ion-label>
-                <ion-datetime display-format="h:mm A" picker-format="h:mm A" id="{{time.note}}Time" value={{time.time}}></ion-datetime>
+                <ion-datetime display-format="h:mm A" picker-format="h:mm A" [(ngModel)]="time.time"></ion-datetime>
             </ion-item>
             <ion-item [hidden]="!time.selected" lines="none">
                 <ion-label>&nbsp; &nbsp;Time range allowed either side</ion-label>
-                <ion-select interface="popover">
-                    <ion-select-option *ngFor="let item of ranges" [value]="item.range">{{item.range}}</ion-select-option>
+                <ion-select [(ngModel)]="time.range" interface="popover">
+                    <ion-select-option *ngFor="let item of ranges" [value]="item.note">{{item.title}}</ion-select-option>
                 </ion-select>
             </ion-item>
         </div>
 
         <ion-item>
-            <ion-button (click)="saveSettings()" expand="full">Save</ion-button>
+            <ion-button (click)="saveRoutine()" expand="full">Save</ion-button>
         </ion-item>
     </ion-list>
 </ion-content>
